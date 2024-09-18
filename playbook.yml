@@ -1,0 +1,5 @@
+---
+- name: Ensure NTP is installed
+  ansible.builtin.yum:
+    name: chrony
+    state: latest
