@@ -5,4 +5,4 @@
   tasks:
     - name: TESTING TASKS
       debug:
-      msg: "I can run"
+        msg: "I can run"
