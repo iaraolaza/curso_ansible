@@ -1,4 +1,8 @@
 ---
 - name: Testing
-  debug:
-    msg: "I can run"
+  hosts: servers
+  become: yes
+  tasks:
+    - name: TESTING TASKS
+      debug:
+      msg: "I can run"
