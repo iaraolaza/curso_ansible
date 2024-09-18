@@ -1,5 +1,9 @@
 ---
-- name: Ensure NTP is installed
-  ansible.builtin.yum:
-    name: chrony
-    state: latest
+- name: NTP instalation
+  hosts: servers
+  tasks: 
+    - name: Ensure NTP is installed
+      ansible.builtin.yum:
+        name: chrony
+        state: latest
+      become: true
