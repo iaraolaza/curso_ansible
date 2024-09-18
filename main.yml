@@ -1,7 +1,6 @@
 ---
 - name: Testing
   hosts: servers
-  become: yes
   tasks:
     - name: TESTING TASKS
       debug:
