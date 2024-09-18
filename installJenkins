@@ -1,0 +1,43 @@
+---
+- name: Playbook para instalar Jenkins en RedHat/CentOS
+  hosts: servers
+  become: yes
+  gather_facts: true
+
+  tasks:
+    - name: Descargar el repositorio de Jenkins
+      ansible.builtin.get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Importar la clave GPG de Jenkins
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+    - name: Actualizar los paquetes del sistema
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+
+    - name: Instalar dependencias requeridas para Jenkins
+      ansible.builtin.yum:
+        name:
+          - fontconfig
+          - java-17-openjdk
+        state: present
+
+    - name: Instalar Jenkins
+      ansible.builtin.yum:
+        name: jenkins
+        state: present
+
+    - name: Recargar el daemon de systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Habilitar y arrancar el servicio de Jenkins
+      ansible.builtin.systemd:
+        name: jenkins
+        enabled: yes
+        state: started
