@@ -7,3 +7,11 @@
         name: chrony
         state: latest
       become: true
+      when: ansible_distribution == "CentOS"
+      
+    - name: Ensure NTP is installed
+      ansible.builtin.apt:
+        name: ntp
+        state: latest
+      become: true
+      when: ansible_distribution == "Ubuntu"
