@@ -1,17 +1,30 @@
 ---
-- name: NTP instalation
-  hosts: servers
-  tasks: 
-    - name: Ensure NTP is installed
-      ansible.builtin.yum:
-        name: chrony
-        state: latest
-      become: true
-      when: ansible_facts[ansible_os_family] == "RedHat"
-      
-    - name: Ensure NTP is installed
+- name: Provisioning servers
+  hosts: all
+  become: true
+  tasks:
+    - name: Install NTP agent on Ubuntu
       ansible.builtin.apt:
+        name: ntp
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Install NTP agent on RedHat
+      ansible.builtin.dnf:
         name: chrony
-        state: latest
-      become: true
-      when: ansible_facts[ansible_distribution] == "Ubuntu"
+        state: present
+      when: ansible_distribution == "RedHat"
+
+    - name: Start service on Ubuntu
+      ansible.builtin.service:
+        name: ntp
+        state: started
+        enabled: true
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Start service on RedHat
+      ansible.builtin.service:
+        name: chronyd
+        state: started
+        enabled: true
+      when: ansible_distribution == "RedHat"
